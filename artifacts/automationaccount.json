@@ -1,0 +1,58 @@
+{
+	"kind": "template",
+	"properties": {
+		"dependsOn": [],
+		"template": {
+		  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+		  "contentVersion": "1.0.0.0",
+		  "parameters": {
+		    "AAautomationAccountLocation": {
+		      "type": "string",
+		    },
+        "AAautomationAccountName":{
+          "type": "string"
+        }
+		  },
+		  "variables": {},
+		  "resources": [
+        {
+          "name": "[parameters('AAautomationAccountName')]",
+          "type": "Microsoft.Automation/automationAccounts",
+          "apiVersion": "2015-10-31",
+          "properties": {
+            "sku": {
+              "name": "Free",
+            }
+          },
+          "location": "[parameters('AAautomationAccountLocation')]",
+          "tags": {}
+        }
+		  ],
+      "outputs": {
+        "AutomationAccountId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Automation/automationAccounts', parameters('AAautomationAccountName'))]"
+        },
+				"accountName": {
+            "type": "string",
+            "value": "[parameters('AAautomationAccountName')]"
+        },
+				"accountLocation": {
+            "type": "string",
+            "value": "[parameters('AAautomationAccountLocation')]"
+        }
+      }
+		},
+		"resourceGroup": "Project-Essentials",
+		"displayName": "RunbookAutomater",
+		"parameters": {
+			"AAautomationAccountLocation": {
+				"value": "[parameters('automationAccountLocation')]"
+			},
+      "AAautomationAccountName": {
+				"value": "[parameters('automationAccountName')]"
+			}
+		}
+	},
+	"type": "Microsoft.Blueprint/blueprints/artifacts"
+}

@@ -1,0 +1,110 @@
+{
+	"kind": "template",
+	"properties": {
+		"dependsOn": [],
+		"template": {
+		  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+		  "contentVersion": "1.0.0.0",
+		  "parameters": {
+		    "Budgetamount": {
+		      "type": "string",
+		    },
+		    "BudgettimeGrain": {
+		      "type": "string",
+		    },
+		    "BudgetstartDate": {
+		      "type": "string",
+		    },
+		    "BudgetendDate": {
+		      "type": "string",
+		    },
+		    "BudgetcontactEmails": {
+		      "type": "array",
+		    },
+				"BActionGroupId": {
+		      "type": "string",
+		    },
+		  },
+		  "variables": {},
+		  "resources": [
+		    {
+		      "type": "Microsoft.Consumption/budgets",
+		      "name": "Project-Budget",
+		      "apiVersion": "2019-10-01",
+		      "properties": {
+		        "category": "Cost",
+		        "amount": "[parameters('Budgetamount')]",
+		        "timeGrain": "[parameters('BudgettimeGrain')]",
+		        "timePeriod": {
+		          "startDate": "[parameters('BudgetstartDate')]",
+		          "endDate": "[parameters('BudgetendDate')]"
+		        },
+		        "notifications": {
+							"50-Reached": {
+		            "enabled": true,
+		            "operator": "GreaterThan",
+		            "threshold": "50",
+		            "contactEmails": "[parameters('BudgetcontactEmails')]",
+		            "contactRoles": ["Owner", "Contributor", "Reader"]
+		          },
+							"70-Reached": {
+		            "enabled": true,
+		            "operator": "GreaterThan",
+		            "threshold": "70",
+		            "contactEmails": "[parameters('BudgetcontactEmails')]",
+		            "contactRoles": ["Owner", "Contributor", "Reader"]
+		          },
+							"85-Reached": {
+		            "enabled": true,
+		            "operator": "GreaterThan",
+		            "threshold": "85",
+		            "contactEmails": "[parameters('BudgetcontactEmails')]",
+		            "contactRoles": ["Owner", "Contributor", "Reader"]
+		          },
+							"95-Reached": {
+		            "enabled": true,
+		            "operator": "GreaterThan",
+		            "threshold": "95",
+		            "contactEmails": "[parameters('BudgetcontactEmails')]",
+		            "contactRoles": ["Owner", "Contributor", "Reader"]
+		          },
+		          "Teardown": {
+		            "enabled": true,
+		            "operator": "GreaterThan",
+		            "threshold": "100",
+		            "contactEmails": "[parameters('BudgetcontactEmails')]",
+		            "contactRoles": ["Owner", "Contributor", "Reader"],
+		            "contactGroups": ["[parameters('BActionGroupId')]"]
+		          }
+		        }
+		      }
+		    }
+		  ]
+		}
+,
+		"resourceGroup": "Project-Resources",
+		"displayName": "Project-Budget",
+		"parameters": {
+			"Budgetamount": {
+				"value": "[parameters('amount')]"
+			},
+			"BudgettimeGrain": {
+				"value": "[parameters('timeGrain')]"
+			},
+			"BudgetstartDate": {
+				"value": "[parameters('startDate')]"
+			},
+			"BudgetendDate": {
+				"value": "[parameters('endDate')]"
+			},
+			"BudgetcontactEmails": {
+				"value": "[parameters('contactEmails')]"
+			},
+			"BActionGroupId": {
+        "value": "[artifacts('actiongroup').outputs.ActionGroupId]"
+      }
+		},
+		"dependsOn": ["actiongroup"]
+	},
+	"type": "Microsoft.Blueprint/blueprints/artifacts"
+}

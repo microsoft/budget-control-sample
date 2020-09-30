@@ -1,0 +1,80 @@
+{
+    "properties": {
+        "description": "This is a sample blueprint meant as inspiration. It provides a way to create budget control in Azure. For more information visit https://github.com/T-Mads/Budget-Control-Sample.",
+        "targetScope": "subscription",
+        "parameters": {
+          "amount": {
+              "type": "string",
+              "defaultValue": "1000",
+              "metadata": {
+                "description": "The total amount of cost or usage to track with the budget. NOTE measured in the currency of the account."
+              }
+            },
+            "timeGrain": {
+              "type": "string",
+              "defaultValue": "Monthly",
+              "allowedValues": [
+                "Monthly",
+                "Quarterly",
+                "Annually"
+              ],
+              "metadata": {
+                "description": "The time covered by a budget. Tracking of the amount will be reset based on the time grain."
+              }
+            },
+            "startDate": {
+              "type": "string",
+              "defaultValue": "2020-06-01",
+              "metadata": {
+                "description": "The start date must be first of the month in YYYY-MM-DD format. Future start date should not be more than three months. Past start date should be selected within the timegrain period."
+              }
+            },
+            "endDate": {
+              "type": "string",
+              "defaultValue": "2028-06-01",
+              "metadata": {
+                "description": "The end date for the budget in YYYY-MM-DD format. If not provided, we default this to 10 years from the start date."
+              }
+            },
+            "contactEmails": {
+              "type": "array",
+              "defaultValue": ["mail@domain.it"],
+              "metadata": {
+                "description": "The list of email addresses to send the budget notification to when the threshold is exceeded."
+              },
+            },
+            "projectName": {
+                "type": "string",
+                "defaultValue": "Alpha",
+                "metadata": {
+                    "description": "The name of the project, all the the generated resource groups will then be named using the following pattern: Project-$projectName-Resources and Project-$projectName-Essentials."
+                }
+            },
+            "automationAccountLocation": {
+                "type": "string",
+                "defaultValue": "westeurope",
+                "metadata": {
+                    "description": "Specify the location in which to create the Automation account (sample locations: westeurope, eastus etc.)."
+                }
+            },
+            "automationAccountName": {
+                "type": "string",
+                "defaultValue": "RunbookAutomater",
+                "metadata": {
+                    "description": "Name of the automation account."
+                }
+            }
+        },
+        "resourceGroups": {
+            "Project-Resources": {
+                "description": "An optional description for your RG artifact. FYI location and name properties can be left out and we will assume they are assignment-time parameters",
+                "name": "[concat('Project-',parameters('projectName'),'-Resources')]"
+            },
+            "Project-Essentials": {
+                "description": "An optional description for your RG artifact. FYI location and name properties can be left out and we will assume they are assignment-time parameters",
+                "name": "[concat('Project-',parameters('projectName'),'-Essentials')]"
+            }
+        }
+    },
+    "type": "Microsoft.Blueprint/blueprints"
+}
